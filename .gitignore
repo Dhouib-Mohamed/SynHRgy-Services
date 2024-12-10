@@ -1,2 +1,3 @@
 .idea
 ./recruitment_service/node_modules
+*/.env
