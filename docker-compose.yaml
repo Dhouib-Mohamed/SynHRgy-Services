@@ -1,0 +1,46 @@
+services:
+  billing:
+    image: billing:latest
+    build:
+      context: ./billing_service
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+  client-relations:
+    image: client-relations:latest
+    build:
+      context: ./client_relations_service
+      dockerfile: Dockerfile
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+  document-processing:
+    image: document-processing:latest
+    build:
+      context: ./document_processing
+      dockerfile: Dockerfile
+    ports:
+      - "4002:4002"
+    environment:
+      - SERVER_PORT=4002
+  recruitment:
+    image: recruitment:latest
+    build:
+      context: ./recruitment_service
+      dockerfile: Dockerfile
+    ports:
+      - "4003:4003"
+    environment:
+      - PORT=4003
+  training:
+    image: training:latest
+    build:
+      context: ./training_service
+      dockerfile: Dockerfile
+    ports:
+      - "4004:8000"
+    environment:
+      - PORT=8000
