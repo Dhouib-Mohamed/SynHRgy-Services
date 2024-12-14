@@ -2,11 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
-	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
 
 type Candidate struct {
@@ -35,6 +36,7 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/generate_and_send_candidate_docs/{candidate_id}", GenerateAndSendCandidateDocs).Methods("POST")
 	router.HandleFunc("/receive_candidate_answer/{candidate_id}", ReceiveCandidateAnswer).Methods("POST")
+	router.HandleFunc("/validate_offer/{offer_request_id}", ValidateOffer).Methods("POST")
 
 	log.Printf("Server starting on port %s...", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
@@ -76,6 +78,21 @@ func ReceiveCandidateAnswer(w http.ResponseWriter, r *http.Request) {
 	message := map[string]string{
 		"message": "Candidate accepted. Notification sent to training and finance services",
 		"status":  candidate.Status,
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(message)
+}
+
+func ValidateOffer(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	offerRequestID := vars["offer_request_id"]
+
+	// Hardcoded validation logic for PoC
+	message := map[string]string{
+		"message":          "Offer validated successfully",
+		"offer_request_id": offerRequestID,
+		"status":           "Valid",
 	}
 
 	w.WriteHeader(http.StatusOK)

@@ -1,0 +1,8 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:fin="http://FinanceService.example.com">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <fin:validate_invoice>
+         <fin:invoice_id>67890</fin:invoice_id>
+      </fin:validate_invoice>
+   </soapenv:Body>
+</soapenv:Envelope>
