@@ -33,6 +33,26 @@ class FinanceService(ServiceBase):
 
         return f"Invoice validated: {invoice_data}"
 
+    @rpc(Integer, _returns=String)
+    def pay_invoice(ctx, invoice_id):
+        # Simulate payment processing logic
+        if invoice_id not in FinanceService.invoices:
+            return f"Invoice with ID {invoice_id} not found."
+
+        invoice_data = FinanceService.invoices[invoice_id]
+
+        # Simulate connecting with Stripe and validating payment
+        # (In a real implementation, this would involve API calls to Stripe)
+        # For example:
+        # stripe_response = stripe.Charge.create(...)
+        # if stripe_response['status'] == 'succeeded':
+        invoice_data["status"] = "Paid"
+        invoice_data["payment_method"] = "Stripe"
+
+        FinanceService.invoices[invoice_id] = invoice_data
+
+        return f"Invoice payment processed: {invoice_data}"
+
 # Load environment variables
 APP_NAME = os.getenv("APP_NAME", "FinanceService")
 APP_PORT = os.getenv("APP_PORT", "8082")

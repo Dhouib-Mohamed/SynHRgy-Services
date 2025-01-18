@@ -13,7 +13,7 @@ install:
 run:
 	@echo "Starting $(APP_NAME) on port $(PORT)..."
 	# TODO rename python3 to python for windows/ubuntu users 
-	APP_PORT=$(PORT) python3 main.py
+	APP_PORT=$(PORT) python main.py
 
 # Build the Docker image
 .PHONY: docker-build
