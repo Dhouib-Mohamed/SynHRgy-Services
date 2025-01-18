@@ -1,74 +1,87 @@
-# Recruitment Service API
+# Recruitement Service API
 
-This is a simple **Recruitment Service (Back Office)** RESTful API built with **Express.js**. It allows you to list job applications and update their statuses, simulating integration with a Document Processing system via logs.
+This project provides an Express-based API to manage job applications. It supports creating, retrieving, and updating the status of applications for different job roles.
 
----
+## Features
 
-## 🚀 Features
-- **GET `/applications`**: List all job applications (filter by role with query parameter `role`).
-- **POST `/application/:id`**: Accept/Reject a candidate's application by updating its status.
+- **Submit a new application**
+- **Retrieve applications with optional filters**
+- **Update the status of an existing application**
 
----
+## Installation
 
-## 📚 API Endpoints
+To get started with this project, clone the repository and install the dependencies:
 
-### 1. **GET `/applications`**
-
-Fetch all applications or filter by role.
-
-#### **URL**:
-```plaintext
-GET http://localhost:3000/applications
+```bash
+git clone https://github.com/Dhouib-Mohamed/SynHRgy-Services.git
+cd recruitment service
+npm install
 ```
 
-#### **Optional Query Parameters:**
-- `role`: Filter by job role.
+Make sure to create a `.env` file to define environment variables like `HOST` and `PORT`.
 
-#### Example Request:
-```http
-GET /applications?role=Software%20Engineer
+## API Endpoints
+
+### 1. **Create New Application**
+- **URL**: `/applications`
+- **Method**: `POST`
+- **Body**:
+    ```json
+    {
+      "candidateName": "John Doe",
+      "role": "Software Engineer",
+      "status": "Pending",
+      "offerId": "101"
+    }
+    ```
+- **Response**:
+    - `201 Created`: Application created successfully.
+    - `400 Bad Request`: Missing required fields in the request body.
+
+### 2. **Get All Applications (With Filters)**
+- **URL**: `/applications`
+- **Method**: `GET`
+- **Query Parameters** (optional):
+    - `role`: Filter applications by job role.
+    - `offerId`: Filter applications by offer ID.
+    - `candidateName`: Filter applications by candidate name (case-insensitive).
+    - `status`: Filter applications by status (e.g., `Pending`, `Approved`, `Rejected`).
+
+- **Response**:
+    - `200 OK`: Returns the filtered list of applications.
+
+### 3. **Update Application Status**
+- **URL**: `/application/:id`
+- **Method**: `PUT`
+- **URL Parameters**:
+    - `id`: The ID of the application to update.
+- **Body**:
+    ```json
+    {
+      "status": "Approved"
+    }
+    ```
+- **Response**:
+    - `200 OK`: Candidate status updated successfully.
+    - `404 Not Found`: Application not found.
+
+## Environment Variables
+
+The following environment variables can be configured in a `.env` file:
+
+- `HOST`: The host address where the server will run (default: `localhost`).
+- `PORT`: The port on which the server will listen (default: `3000`).
+
+## Running the Application
+
+To start the server, run the following command:
+
+```bash
+npm start
 ```
 
-#### Example Response:
-```json
-[
-  {
-    "id": "1",
-    "candidateName": "John Doe",
-    "role": "Software Engineer",
-    "status": "Pending"
-  }
-]
-```
+The server will be available at `http://localhost:3000`
 
----
+## Testing the API
 
-### 2. **POST `/application/:id`**
-
-Update an application’s status.
-
-#### **URL**:
-```plaintext
-POST http://localhost:3000/application/:id
-```
-
-#### **Request Body**:
-```json
-{
-  "status": "done"
-}
-```
-
-#### Example Response:
-```json
-{
-  "message": "Application updated",
-  "applicationId": "2",
-  "newStatus": "done"
-}
-```
-
----
-
-## 🏆 Technologies
-- **Express.js**: Framework for building APIs
+You can test the API using any HTTP client like Postman or cURL.
