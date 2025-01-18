@@ -2,3 +2,5 @@
 ./recruitment_service/node_modules
 ./client_relations_service/node_modules
 */.env
+
+./document_processing/document-processing-service
