@@ -95,23 +95,31 @@ app.post('/change_offer_status/:company_id', (req, res) => {
   });
 });
 
-// GET /get_offer/:company_id
-// Retrieves the offer and its status by company_id
+// Endpoint to retrieve offers by company ID with optional status filtering
 app.get('/get_offer/:company_id', (req, res) => {
   const { company_id } = req.params;
+  const { status } = req.query; // Extract optional status from query params
 
-  // Find the offer for the given company_id
-  const offer = offers.find(o => o.id === company_id);
+  // Filter offers by company_id
+  let companyOffers = offers.filter(o => o.company_id === company_id);
 
-  if (!offer) {
-    return res.status(404).json({ message: 'No offer found for the specified company' });
+  // If a status is provided, further filter by status
+  if (status) {
+    companyOffers = companyOffers.filter(o => o.status === status);
+  }
+
+  if (companyOffers.length === 0) {
+    return res.status(404).json({
+      message: 'No offers found for the specified criteria',
+    });
   }
 
   res.status(200).json({
-    message: 'Offer retrieved successfully',
-    offer,
+    message: 'Offers retrieved successfully',
+    offers: companyOffers,
   });
 });
+
 
 // Start the server
 const HOST = process.env.HOST || 'localhost';
