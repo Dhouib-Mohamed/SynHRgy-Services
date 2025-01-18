@@ -95,6 +95,43 @@ app.post('/change_offer_status/:company_id', (req, res) => {
   });
 });
 
+// Endpoint to update offer status
+app.put('/change_offer_status/:company_id', (req, res) => {
+  const { company_id } = req.params;
+  const { status } = req.body;
+
+  // Validate the provided status
+  if (!['searching', 'declined'].includes(status)) {
+    return res.status(400).json({
+      message: 'Invalid status. Only "searching" or "declined" are allowed.',
+    });
+  }
+
+  // Find the offer for the given company_id
+  const offer = offers.find(o => o.company_id === company_id);
+  if (!offer) {
+    return res.status(404).json({
+      message: 'Offer not found for the specified company',
+    });
+  }
+
+  // Update the status based on conditions
+  if (status === 'searching' && offer.status === 'pending') {
+    offer.status = 'searching';
+  } else if (status === 'declined' && offer.status === 'pending') {
+      offer.status = 'declined';
+  } else {
+    return res.status(400).json({
+      message: `Cannot update offer to status "${status}" from current status "${offer.status}".`,
+    });
+  }
+
+  res.status(200).json({
+    message: `Offer status updated to "${status}"`,
+    offer,
+  });
+});
+
 // Endpoint to retrieve offers by company ID with optional status filtering
 app.get('/get_offer/:company_id', (req, res) => {
   const { company_id } = req.params;
